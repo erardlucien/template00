@@ -1,0 +1,104 @@
+// reset
+
+html {
+    box-sizing: border-box;
+    font-size: 62,5%;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+// custom variable
+
+$clr-primary: rgb(30, 30, 223);
+$clr-secondary: rgb(245, 245, 253);
+$clr-ternary: rgb(25, 25, 13);
+$clr-gray: rgb(123, 123, 123);
+
+// container
+
+.container {
+    min-height: 100vh;
+    background-color: $clr-secondary;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+    * {
+        color: $clr-ternary;
+    }
+
+    p {
+        line-break: strict;
+    }
+}
+
+// write-coworker-data, delete-coworker
+
+.write-coworker-data,
+.delete-coworker {
+    display: flex;
+    max-width: 20rem;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    input {
+        padding: 1.2rem 1.3rem;
+    }
+
+    input:not(.add-btn, .del-btn) {
+        max-width: 6rem;
+    }
+}
+
+// delete-coworker
+
+.delete-coworker {
+    flex-direction: column;
+}
+
+// add-btn, del-btn
+
+.add-btn,
+.del-btn {
+    display: block;
+    margin: 1.2rem auto;
+    background-color: $clr-primary;
+    color: $clr-secondary;
+    border: 0;
+    outline: 0.1rem solid transparent;
+    cursor: pointer;
+
+    &:active {
+        background-color: $clr-secondary;
+        color: $clr-primary;
+        border: 0.2rem solid $clr-gray;
+    }
+}
+
+// coworker-infos
+
+.coworker-infos {
+
+    border-collapse: collapse;
+
+    td {
+        padding: 1.5rem 1.2rem;
+        border: 0.2rem solid $clr-gray;
+    }
+
+    thead td {
+        background-color: $clr-primary;
+        color: $clr-secondary;
+    }
+
+    td:not(thead td) {
+        background-color: $clr-secondary;
+    }
+}

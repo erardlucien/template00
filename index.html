@@ -1,0 +1,47 @@
+ <!DOCTYPE html>
+ <html lang="de">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template00</title>
+    <link rel="stylesheet" href="./css/style.css">
+ </head>
+ <body>
+    <div class="container">
+        <h1>
+            Mitarbeiter hinzufügen:
+        </h1>
+        <div class="write-coworker-data">
+            <input type="text" placeholder="Name" class="worker-name" id="worker-name">
+            <input type="text" placeholder="Arbeitsicht" class="worktime" id="worktime">
+            <input type="number" placeholder="Stunden" min="10" max="40" class="hours" id="hours">
+            <input type="button" class="add-btn" id="add-btn" value="Hinzufügen">
+        </div>
+        <h1>
+            Mitarbeiter entfernen
+        </h1>
+        <div class="delete-coworker">
+            <input type="text" name="Name" id="worker-to-delete" class="worker-to-delete">
+            <input type="button" class="del-btn" id="del-btn" value="Entfernen">
+        </div>
+        <table class="coworker-infos">
+            <thead>
+                <td>Mitarbeiter</td>
+                <td>Sicht</td>
+                <td>Stunden</td>
+            </thead>
+            <tbody class="coworker-infos-body">
+
+            </tbody>
+        </table>
+    </div>
+    <template id="coworker-data">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </template>
+    <script src="./js/index.js"></script>
+ </body>
+ </html>
