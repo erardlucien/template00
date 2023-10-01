@@ -72,19 +72,15 @@ $clr-gray: rgb(203, 203, 203);
 
 .delete-coworker {
     flex-direction: column;
-    position: relative;
+    align-items: center;
 }
 
 // possible-workers
 
 .possible-workers {
-    position: absolute;
     list-style: none;
     max-width: inherit;
     background-color: $clr-secondary;
-    top: 38%;
-    left: 50%;
-    transform: translateX(-50%);
 
     li {
         padding: 1.2rem 1.5rem;

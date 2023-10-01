@@ -7,23 +7,23 @@ let coworkerData = document.querySelector('#coworker-data');
 let coworkerDataCells = coworkerData.content.querySelectorAll('td');
 let addBtn = document.querySelector('.add-btn');
 let workerName = document.querySelector('.worker-name');
-let worktime = document.querySelector('.worktime');
+let workShift = document.querySelector('.work-shift');
 let hours = document.querySelector('.hours');
 let workerToDelete = document.querySelector('.worker-to-delete');
 let delBtn = document.querySelector('.del-btn');
 let possibleWorkers = document.querySelector('.possible-workers');
 let possibleWorkerName = document.querySelector('#possible-worker-name');
 let timeout;
-const WORKTIMEVALUES = ['Früh', 'Spät', 'Nacht'];
+const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
 const MAXHOURS = parseInt(hours.max);
-const MAXNAMELENGTH = 7;
+const MAXNAMELENGTH = 11;
 
 let dataSamples = [
-    ['Mark', 'Früh', 23],
-    ['Eric', 'Früh', 40],
-    ['Emily', 'Nacht', 15],
-    ['Suzane', 'Spät', 25],
+    ['Mark', 'Early', 23],
+    ['Eric', 'Early', 40],
+    ['Emily', 'Night', 15],
+    ['Suzane', 'Late', 25],
 ];
 
 function getData(data) {
@@ -50,9 +50,9 @@ function message(text) {
         }, 1500 );
 }
 
-function isWorktimeValid(worktime) {
-    for(let element of WORKTIMEVALUES) {
-        if(element === worktime) {
+function isworkShiftValid(workShiftText) {
+    for(let element of WORKSHIFTVALUES) {
+        if(element === workShiftText) {
             return true;
         }
     }
@@ -107,70 +107,70 @@ dataSamples.forEach(getData);
 
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
-    let workTimeText = worktime.value;
+    let workShiftText = workShift.value;
     let hoursNumber = parseInt(hours.value);
 
     if( workerNameText.length < 1 ||
-        workTimeText.length < 1 ||
+        workShiftText.length < 1 ||
         hoursNumber.length < 1 ) {
-        message('Alles muss gesetzt werden!');
+        message('Every inputs must be set!');
         return;
     }
 
     if( workerNameText.indexOf(' ') >= 0 ||
-    workTimeText.indexOf(' ') >= 0 ) {
-        message('Leerzeichen sind nicht erlaubt!');
+    workShiftText.indexOf(' ') >= 0 ) {
+        message('Space is not allowed!');
         return;
     }
 
     if( isNaN(hoursNumber) ) {
-        message('Nur Zahlen sind erlaubt!');
+        message('Only Number is allowed for hours!');
         return;
     }
 
     if( workerNameText.length >= MAXNAMELENGTH + 1) {
-        message('Der Name darf nicht länger als ' + MAXNAMELENGTH + ' sein!');
+        message('The of the name must be smaller than ' + MAXNAMELENGTH + '!');
         return;
     }
 
     if(isAlreadyAWorker(workerNameText)) {
-        message('Ist schon ein Mitarbeiter!');
+        message( workerNameText + ' is already a worker!');
         return;
     }
 
-    if(!isWorktimeValid(workTimeText)) {
-        message('Der Sicht muss Früh, Spät oder Nacht sein!');
+    if(!isworkShiftValid(workShiftText)) {
+        message('The Shift must be Early, Late or Night!');
         return;
     }
 
     if(hoursNumber < MINHOURS || hoursNumber >= MAXHOURS + 1) {
-        message('Die Stunden müssen zwischen 10 und 40 Stunden sein!');
+        message('Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!');
         return;
     }
 
-    getData([workerNameText, workTimeText, hoursNumber]);
-    message(workerNameText + ' wurde hinzugefügt!');
+    getData([workerNameText, workShiftText, hoursNumber]);
+    message(workerNameText + ' was added!');
 });
 
 delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
 
     if( toDelete.length < 1 ) {
-        message('Eine Eingabe muss hinzugefügt werden!');
+        message('You muss write a name!');
         return;
     }
 
     if( toDelete.indexOf(' ') >= 0 ) {
-        message('Leerzeichen sind nicht erlaubt!');
+        message('Space is not allowed!');
         return;
     }
 
     if(!isAlreadyAWorker(toDelete)) {
-        message(toDelete + ' gehört nicht zur Liste!');
+        message(toDelete + ' is not part of the list!');
     } else {
         workerToDelete.value = '';
         coworkerinfosBody.removeChild(returnWorker(toDelete));
-        message(toDelete + ' ist gelöscht!');
+        message(toDelete + ' was deleted!');
     }
 }
 );
@@ -179,13 +179,9 @@ delBtn.addEventListener('click', () => {
     function showPossibleWorkers() {
         let coworkers = coworkerinfosBody.children;
 
-        setTimeout(
-            () => {
-                while( possibleWorkers.children.length >= 1) {
-                    possibleWorkers.removeChild(possibleWorkers.firstChild);
-                }
-            }
-            , 2000);
+        while( possibleWorkers.children.length >= 1) {
+            possibleWorkers.removeChild(possibleWorkers.firstChild);
+        }
 
         if(delBtn.clicked) {
             clearTimeout(timeout);
@@ -213,11 +209,11 @@ delBtn.addEventListener('click', () => {
                 let workerName = element.textContent;
                 workerToDelete.value = workerName;
                 clearTimeout(timeout);
-                timeout = setTimeout(showPossibleWorkers, 2500);
+                timeout = setTimeout(showPossibleWorkers, 1000);
             });
         }
 
-        timeout = setTimeout(showPossibleWorkers, 2500);
+        timeout = setTimeout(showPossibleWorkers, 1000);
     }
 )();
 

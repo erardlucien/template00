@@ -1,5 +1,5 @@
  <!DOCTYPE html>
- <html lang="de">
+ <html lang="en">
  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,29 +9,29 @@
  <body>
     <div class="container">
         <h1>
-            Mitarbeiter hinzufügen:
+            Add worker:
         </h1>
         <div class="write-coworker-data">
             <input type="text" placeholder="Name" class="worker-name" id="worker-name">
-            <input type="text" placeholder="Sicht" class="worktime" id="worktime">
-            <input type="number" placeholder="Stunden" min="10" max="40" class="hours" id="hours">
-            <input type="button" class="add-btn" id="add-btn" value="Hinzufügen">
+            <input type="text" placeholder="Shift" class="work-shift" id="work-shift">
+            <input type="number" placeholder="Hours" min="10" max="40" class="hours" id="hours">
+            <input type="button" class="add-btn" id="add-btn" value="Add">
         </div>
         <h1>
-            Mitarbeiter entfernen
+            Delete coworker:
         </h1>
         <div class="delete-coworker">
             <input type="text" name="Name" id="worker-to-delete" class="worker-to-delete">
-            <input type="button" class="del-btn" id="del-btn" value="Entfernen">
+            <input type="button" class="del-btn" id="del-btn" value="Delete">
             <ul class="possible-workers">
 
             </ul>
         </div>
         <table class="coworker-infos">
             <thead>
-                <td>Mitarbeiter</td>
-                <td>Sicht</td>
-                <td>Stunden</td>
+                <td>Coworker</td>
+                <td>Shift</td>
+                <td>Hours</td>
             </thead>
             <tbody class="coworker-infos-body">
 
