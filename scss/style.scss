@@ -15,10 +15,12 @@ html {
 
 // custom variable
 
-$clr-primary: rgb(30, 30, 223);
-$clr-secondary: rgb(245, 245, 253);
+$clr-primary: rgb(60, 160, 203);
+$clr-secondary: rgb(245, 245, 243);
 $clr-ternary: rgb(25, 25, 13);
-$clr-gray: rgb(123, 123, 123);
+$clr-white: rgb(255, 255, 255);
+$clr-table-cells: rgb(205, 245, 243);
+$clr-gray: rgb(203, 203, 203);
 
 // container
 
@@ -36,6 +38,15 @@ $clr-gray: rgb(123, 123, 123);
 
     p {
         line-break: strict;
+    }
+
+    table {
+        margin: 1.5rem 0;
+    }
+
+    td {
+        padding: 1.5rem 1.2rem;
+        border: 0.1rem solid $clr-ternary;
     }
 }
 
@@ -61,6 +72,34 @@ $clr-gray: rgb(123, 123, 123);
 
 .delete-coworker {
     flex-direction: column;
+    position: relative;
+}
+
+// possible-workers
+
+.possible-workers {
+    position: absolute;
+    list-style: none;
+    max-width: inherit;
+    background-color: $clr-secondary;
+    top: 38%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    li {
+        padding: 1.2rem 1.5rem;
+        background-color: $clr-white;
+        min-width: 7rem;
+        color: $clr-ternary;
+    }
+
+    @media screen and (hover: hover) {
+
+        li:hover {
+            background-color: $clr-primary;
+            color: $clr-secondary;
+        }
+    }
 }
 
 // add-btn, del-btn
@@ -78,7 +117,7 @@ $clr-gray: rgb(123, 123, 123);
     &:active {
         background-color: $clr-secondary;
         color: $clr-primary;
-        border: 0.2rem solid $clr-gray;
+        border: 0.1rem solid $clr-gray;
     }
 }
 
@@ -88,17 +127,12 @@ $clr-gray: rgb(123, 123, 123);
 
     border-collapse: collapse;
 
-    td {
-        padding: 1.5rem 1.2rem;
-        border: 0.2rem solid $clr-gray;
-    }
-
     thead td {
         background-color: $clr-primary;
         color: $clr-secondary;
     }
 
     td:not(thead td) {
-        background-color: $clr-secondary;
+        background-color: $clr-table-cells;
     }
 }

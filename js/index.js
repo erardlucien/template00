@@ -11,6 +11,8 @@ let worktime = document.querySelector('.worktime');
 let hours = document.querySelector('.hours');
 let workerToDelete = document.querySelector('.worker-to-delete');
 let delBtn = document.querySelector('.del-btn');
+let possibleWorkers = document.querySelector('.possible-workers');
+let possibleWorkerName = document.querySelector('#possible-worker-name');
 let timeout;
 const WORKTIMEVALUES = ['Früh', 'Spät', 'Nacht'];
 const MINHOURS = parseInt(hours.min);
@@ -38,13 +40,13 @@ function getData(data) {
 }
 
 function message(text) {
-    let warningElement = document.createElement('p');
-        let warningText = document.createTextNode(text);
-        warningElement.appendChild(warningText);
-        container.insertBefore(warningElement, coworkerInfos);
+    let messageElement = document.createElement('p');
+        let messageText = document.createTextNode(text);
+        messageElement.appendChild(messageText);
+        container.insertBefore(messageElement, coworkerInfos);
 
         setTimeout( () => {
-            container.removeChild(warningElement);
+            container.removeChild(messageElement);
         }, 1500 );
 }
 
@@ -73,6 +75,32 @@ function returnWorker(name) {
         }
     }
     return null;
+}
+
+function hasTheSameCharacters(toCompare1, toCompare2) {
+
+    if(toCompare2.length === 0) {
+        return false;
+    }
+
+    for(let i = 0; i < toCompare2.length; ++i) {
+        if( toCompare1.charAt(i) !== toCompare2.charAt(i) ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function isArealdyInside(text) {
+    let possibleWorkersToDelete = possibleWorkers.children;
+    for(let element of possibleWorkersToDelete) {
+        if(text.localeCompare(element.textContent) === 0) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 dataSamples.forEach(getData);
@@ -149,8 +177,15 @@ delBtn.addEventListener('click', () => {
 
 (
     function showPossibleWorkers() {
-        let text = '';
         let coworkers = coworkerinfosBody.children;
+
+        setTimeout(
+            () => {
+                while( possibleWorkers.children.length >= 1) {
+                    possibleWorkers.removeChild(possibleWorkers.firstChild);
+                }
+            }
+            , 2000);
 
         if(delBtn.clicked) {
             clearTimeout(timeout);
@@ -158,14 +193,31 @@ delBtn.addEventListener('click', () => {
 
         for(let element of coworkers) {
             let workerName = element.children[0].textContent;
-            if( workerName.charAt(0) === workerToDelete.value.charAt(0) ) {
-                text += workerName + ' | ';
+
+            if( hasTheSameCharacters(workerName, workerToDelete.value) &&
+            workerName.localeCompare(workerToDelete.value) >= 0 && 
+            !isArealdyInside(workerName) ) {
+                let workerInList = possibleWorkerName.content.querySelector('li');
+                workerInList.appendChild(document.createTextNode(workerName));
+                let clone = document.importNode(possibleWorkerName.content, true);
+                possibleWorkers.appendChild(clone);
+                workerInList.removeChild(workerInList.firstChild);
+                
             }
         }
 
-        message(text);
+        let possibleWorkersToDelete = possibleWorkers.children;
 
-        timeout = setTimeout(showPossibleWorkers, 2000);
+        for(let element of possibleWorkersToDelete) {
+            element.addEventListener('click', () => {
+                let workerName = element.textContent;
+                workerToDelete.value = workerName;
+                clearTimeout(timeout);
+                timeout = setTimeout(showPossibleWorkers, 2500);
+            });
+        }
+
+        timeout = setTimeout(showPossibleWorkers, 2500);
     }
 )();
 
