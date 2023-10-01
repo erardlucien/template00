@@ -36,6 +36,10 @@ $clr-gray: rgb(203, 203, 203);
         color: $clr-ternary;
     }
 
+    h1:nth-of-type(1) {
+        margin-top: 1.5rem;
+    }
+
     p {
         line-break: strict;
     }
