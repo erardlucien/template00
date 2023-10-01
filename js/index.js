@@ -129,7 +129,7 @@ addBtn.addEventListener('click', () => {
     }
 
     if( workerNameText.length >= MAXNAMELENGTH + 1) {
-        message('The of the name must be smaller than ' + MAXNAMELENGTH + '!');
+        message('The length of name must be smaller than ' + MAXNAMELENGTH + '!');
         return;
     }
 
