@@ -190,6 +190,10 @@ delBtn.addEventListener('click', () => {
         for(let element of coworkers) {
             let workerName = element.children[0].textContent;
 
+            if(workerName.localeCompare(workerToDelete.value) === 0) {
+                break;
+            }
+
             if( hasTheSameCharacters(workerName, workerToDelete.value) &&
             workerName.localeCompare(workerToDelete.value) >= 0 && 
             !isArealdyInside(workerName) ) {
@@ -209,11 +213,11 @@ delBtn.addEventListener('click', () => {
                 let workerName = element.textContent;
                 workerToDelete.value = workerName;
                 clearTimeout(timeout);
-                timeout = setTimeout(showPossibleWorkers, 1000);
+                timeout = setTimeout(showPossibleWorkers, 500);
             });
         }
 
-        timeout = setTimeout(showPossibleWorkers, 1000);
+        timeout = setTimeout(showPossibleWorkers, 500);
     }
 )();
 
