@@ -113,6 +113,12 @@ function isArealdyInside(text) {
     return false;
 }
 
+function deletePossibleWorkers() {
+    while (possibleWorkers.hasChildNodes()) {
+        possibleWorkers.removeChild(possibleWorkers.firstChild);
+    }
+}
+
 dataSamples.forEach(getData);
 
 addBtn.addEventListener('click', () => {
@@ -184,6 +190,7 @@ delBtn.addEventListener('click', () => {
     } else {
         workerToDelete.value = '';
         coworkerinfosBody.removeChild(returnWorker(toDelete));
+        deletePossibleWorkers();
         message(toDelete + ' was deleted!');
     }
 }
@@ -227,9 +234,7 @@ function showPossibleWorkers() {
         element.addEventListener('click', () => {
             let workerName = element.textContent;
             workerToDelete.value = workerName;
-            while (possibleWorkers.hasChildNodes()) {
-                possibleWorkers.removeChild(possibleWorkers.firstChild);
-            }
+            deletePossibleWorkers();
         });
     }
 }
