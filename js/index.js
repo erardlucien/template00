@@ -13,6 +13,7 @@ let workerToDelete = document.querySelector('.worker-to-delete');
 let delBtn = document.querySelector('.del-btn');
 let possibleWorkers = document.querySelector('.possible-workers');
 let possibleWorkerName = document.querySelector('#possible-worker-name');
+let messageElement = document.createElement('p');
 let timeout;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
@@ -40,12 +41,11 @@ function getData(data) {
 }
 
 function message(text) {
-    let messageElement = document.createElement('p');
         let messageText = document.createTextNode(text);
         messageElement.appendChild(messageText);
         container.insertBefore(messageElement, coworkerInfos);
-
         setTimeout( () => {
+            messageElement.removeChild(messageText);
             container.removeChild(messageElement);
         }, 1500 );
 }
