@@ -34,7 +34,7 @@ function getData(data) {
     coworkerDataCells[2].textContent = data[2];
 
     let clone = document.importNode(coworkerData.content, true);
-    if(coworkerinfosBody.hasChildNodes()) {
+    if (coworkerinfosBody.hasChildNodes()) {
         coworkerinfosBody.insertBefore(clone, coworkerinfosBody.firstChild);
     } else {
         coworkerinfosBody.appendChild(clone);
@@ -42,7 +42,7 @@ function getData(data) {
 }
 
 function message(text) {
-    if(messageElement.hasChildNodes()) {
+    if (messageElement.hasChildNodes()) {
         messageElement.removeChild(messageElement.firstChild);
         clearTimeout(timeout2);
     }
@@ -51,14 +51,14 @@ function message(text) {
     messageElement.appendChild(messageText);
     container.insertBefore(messageElement, coworkerInfos);
 
-    timeout2 = setTimeout( () => {
+    timeout2 = setTimeout(() => {
         container.removeChild(messageElement);
-    }, 1500 );
+    }, 1500);
 }
 
 function isworkShiftValid(workShiftText) {
-    for(let element of WORKSHIFTVALUES) {
-        if(element === workShiftText) {
+    for (let element of WORKSHIFTVALUES) {
+        if (element === workShiftText) {
             return true;
         }
     }
@@ -67,9 +67,9 @@ function isworkShiftValid(workShiftText) {
 
 function isAlreadyAWorker(name) {
     let toCompare1 = name.toUpperCase();
-    for(let element of coworkerinfosBody.children) {
+    for (let element of coworkerinfosBody.children) {
         let toCompare2 = element.children[0].textContent.toUpperCase();
-        if( toCompare1.localeCompare(toCompare2) === 0) {
+        if (toCompare1.localeCompare(toCompare2) === 0) {
             return true;
         }
     }
@@ -77,8 +77,8 @@ function isAlreadyAWorker(name) {
 }
 
 function returnWorker(name) {
-    for(let element of coworkerinfosBody.children) {
-        if(element.children[0].textContent === name) {
+    for (let element of coworkerinfosBody.children) {
+        if (element.children[0].textContent === name) {
             return element;
         }
     }
@@ -87,12 +87,12 @@ function returnWorker(name) {
 
 function hasTheSameCharacters(toCompare1, toCompare2) {
 
-    if(toCompare2.length === 0) {
+    if (toCompare2.length === 0) {
         return false;
     }
 
-    for(let i = 0; i < toCompare2.length; ++i) {
-        if( toCompare1.charAt(i) !== toCompare2.charAt(i) ) {
+    for (let i = 0; i < toCompare2.length; ++i) {
+        if (toCompare1.charAt(i) !== toCompare2.charAt(i)) {
             return false;
         }
     }
@@ -103,9 +103,9 @@ function hasTheSameCharacters(toCompare1, toCompare2) {
 function isArealdyInside(text) {
     let possibleWorkersToDelete = possibleWorkers.children;
     let toCompare1 = text.toLowerCase();
-    for(let element of possibleWorkersToDelete) {
+    for (let element of possibleWorkersToDelete) {
         let toCompare2 = element.textContent.toLowerCase();
-        if( toCompare1.localeCompare(toCompare2) === 0) {
+        if (toCompare1.localeCompare(toCompare2) === 0) {
             return true;
         }
     }
@@ -118,46 +118,46 @@ dataSamples.forEach(getData);
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
 
-    workerNameText = workerNameText.slice(0, 1).toUpperCase().concat( workerNameText.slice(1).toLowerCase() );
+    workerNameText = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1).toLowerCase());
 
     let workShiftText = workShift.value;
     let hoursNumber = parseInt(hours.value);
 
-    if( workerNameText.length < 1 ||
+    if (workerNameText.length < 1 ||
         workShiftText.length < 1 ||
-        hoursNumber.length < 1 ) {
+        hoursNumber.length < 1) {
         message('Every inputs must be set!');
         return;
     }
 
-    if( workerNameText.indexOf(' ') >= 0 ||
-    workShiftText.indexOf(' ') >= 0 ) {
+    if (workerNameText.indexOf(' ') >= 0 ||
+        workShiftText.indexOf(' ') >= 0) {
         message('Space is not allowed!');
         return;
     }
 
-    if( isNaN(hoursNumber) ) {
+    if (isNaN(hoursNumber)) {
         message('Only Number is allowed for hours!');
         return;
     }
 
-    if( workerNameText.length >= MAXNAMELENGTH + 1) {
-        message('The length of name must be smaller than ' + MAXNAMELENGTH + '!');
+    if (workerNameText.length >= MAXNAMELENGTH + 1) {
+        message('The length of name must be smaller than ' + (MAXNAMELENGTH + 1) + '!');
         return;
     }
 
-    if(isAlreadyAWorker(workerNameText)) {
+    if (isAlreadyAWorker(workerNameText)) {
         let name = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1));
-        message( name + ' is already a worker!');
+        message(name + ' is already a worker!');
         return;
     }
 
-    if(!isworkShiftValid(workShiftText)) {
+    if (!isworkShiftValid(workShiftText)) {
         message('The Shift must be Early, Late or Night!');
         return;
     }
 
-    if(hoursNumber < MINHOURS || hoursNumber >= MAXHOURS + 1) {
+    if (hoursNumber < MINHOURS || hoursNumber >= MAXHOURS + 1) {
         message('Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!');
         return;
     }
@@ -169,17 +169,17 @@ addBtn.addEventListener('click', () => {
 delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
 
-    if( toDelete.length < 1 ) {
+    if (toDelete.length < 1) {
         message('You muss write a name!');
         return;
     }
 
-    if( toDelete.indexOf(' ') >= 0 ) {
+    if (toDelete.indexOf(' ') >= 0) {
         message('Space is not allowed!');
         return;
     }
 
-    if(!isAlreadyAWorker(toDelete)) {
+    if (!isAlreadyAWorker(toDelete)) {
         message(toDelete + ' is not part of the list!');
     } else {
         workerToDelete.value = '';
@@ -190,11 +190,11 @@ delBtn.addEventListener('click', () => {
 );
 
 workerToDelete.addEventListener('keyup', () => {
-    if(workerToDelete.value.length > 0) {
+    if (workerToDelete.value.length > 0) {
         window.scrollBy(
             {
                 behavior: 'instant',
-                top: workerToDelete.getBoundingClientRect().top -260,
+                top: workerToDelete.getBoundingClientRect().top - 160,
             }
         );
     }
@@ -204,31 +204,31 @@ function showPossibleWorkers() {
     let coworkers = coworkerinfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
-    while( possibleWorkers.children.length >= 1) {
+    while (possibleWorkers.children.length >= 1) {
         possibleWorkers.removeChild(possibleWorkers.firstChild);
     }
 
-    for(let element of coworkers) {
+    for (let element of coworkers) {
         let workerName = element.children[0].textContent;
 
-        if( hasTheSameCharacters(workerName, workerToDelete.value) &&
-        workerName.localeCompare(workerToDelete.value) >= 0 && 
-        !isArealdyInside(workerName) ) {
+        if (hasTheSameCharacters(workerName, workerToDelete.value) &&
+            workerName.localeCompare(workerToDelete.value) >= 0 &&
+            !isArealdyInside(workerName)) {
             let workerInList = possibleWorkerName.content.querySelector('.worker');
             workerInList.appendChild(document.createTextNode(workerName));
             let clone = document.importNode(possibleWorkerName.content, true);
             possibleWorkers.appendChild(clone);
             workerInList.removeChild(workerInList.firstChild);
-            
+
         }
     }
 
-    for(let element of possibleWorkersToDelete) {
+    for (let element of possibleWorkersToDelete) {
         element.addEventListener('click', () => {
             let workerName = element.textContent;
             workerToDelete.value = workerName;
-            while( possibleWorkers.hasChildNodes() ) {
-                possibleWorkers.removeChild( possibleWorkers.firstChild );
+            while (possibleWorkers.hasChildNodes()) {
+                possibleWorkers.removeChild(possibleWorkers.firstChild);
             }
         });
     }
