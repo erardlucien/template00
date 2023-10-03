@@ -194,7 +194,7 @@ workerToDelete.addEventListener('keyup', () => {
         window.scrollBy(
             {
                 behavior: 'instant',
-                top: workerToDelete.getBoundingClientRect().top - 160,
+                top: workerToDelete.getBoundingClientRect().top - 60,
             }
         );
     }
