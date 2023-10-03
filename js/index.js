@@ -41,13 +41,17 @@ function getData(data) {
 }
 
 function message(text) {
-        let messageText = document.createTextNode(text);
-        messageElement.appendChild(messageText);
-        container.insertBefore(messageElement, coworkerInfos);
-        setTimeout( () => {
-            messageElement.removeChild(messageText);
-            container.removeChild(messageElement);
-        }, 1500 );
+    if(messageElement.hasChildNodes()) {
+        messageElement.removeChild(messageElement.firstChild);
+    }
+
+    let messageText = document.createTextNode(text);
+    messageElement.appendChild(messageText);
+    container.insertBefore(messageElement, coworkerInfos);
+
+    setTimeout( () => {
+        container.removeChild(messageElement);
+    }, 1500 );
 }
 
 function isworkShiftValid(workShiftText) {
