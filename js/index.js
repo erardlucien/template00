@@ -66,8 +66,10 @@ function isworkShiftValid(workShiftText) {
 }
 
 function isAlreadyAWorker(name) {
+    let toCompare1 = name.toUpperCase();
     for(let element of coworkerinfosBody.children) {
-        if(element.children[0].textContent === name) {
+        let toCompare2 = element.children[0].textContent.toUpperCase();
+        if( toCompare1.localeCompare(toCompare2) === 0) {
             return true;
         }
     }
@@ -100,8 +102,10 @@ function hasTheSameCharacters(toCompare1, toCompare2) {
 
 function isArealdyInside(text) {
     let possibleWorkersToDelete = possibleWorkers.children;
+    let toCompare1 = text.toLowerCase();
     for(let element of possibleWorkersToDelete) {
-        if(text.localeCompare(element.textContent) === 0) {
+        let toCompare2 = element.textContent.toLowerCase();
+        if( toCompare1.localeCompare(toCompare2) === 0) {
             return true;
         }
     }
@@ -113,6 +117,9 @@ dataSamples.forEach(getData);
 
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
+
+    workerNameText = workerNameText.slice(0, 1).toUpperCase().concat( workerNameText.slice(1).toLowerCase() );
+
     let workShiftText = workShift.value;
     let hoursNumber = parseInt(hours.value);
 
@@ -140,7 +147,8 @@ addBtn.addEventListener('click', () => {
     }
 
     if(isAlreadyAWorker(workerNameText)) {
-        message( workerNameText + ' is already a worker!');
+        let name = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1));
+        message( name + ' is already a worker!');
         return;
     }
 
@@ -181,49 +189,49 @@ delBtn.addEventListener('click', () => {
 }
 );
 
-(
-    function showPossibleWorkers() {
-        let coworkers = coworkerinfosBody.children;
-
-        while( possibleWorkers.children.length >= 1) {
-            possibleWorkers.removeChild(possibleWorkers.firstChild);
-        }
-
-        if(delBtn.clicked) {
-            clearTimeout(timeout);
-        }
-
-        for(let element of coworkers) {
-            let workerName = element.children[0].textContent;
-
-            if(workerName.localeCompare(workerToDelete.value) === 0) {
-                break;
+workerToDelete.addEventListener('keyup', () => {
+    if(workerToDelete.value.length > 0) {
+        window.scrollBy(
+            {
+                behavior: 'instant',
+                top: workerToDelete.getBoundingClientRect().top -260,
             }
-
-            if( hasTheSameCharacters(workerName, workerToDelete.value) &&
-            workerName.localeCompare(workerToDelete.value) >= 0 && 
-            !isArealdyInside(workerName) ) {
-                let workerInList = possibleWorkerName.content.querySelector('li');
-                workerInList.appendChild(document.createTextNode(workerName));
-                let clone = document.importNode(possibleWorkerName.content, true);
-                possibleWorkers.appendChild(clone);
-                workerInList.removeChild(workerInList.firstChild);
-                
-            }
-        }
-
-        let possibleWorkersToDelete = possibleWorkers.children;
-
-        for(let element of possibleWorkersToDelete) {
-            element.addEventListener('click', () => {
-                let workerName = element.textContent;
-                workerToDelete.value = workerName;
-                clearTimeout(timeout);
-                timeout = setTimeout(showPossibleWorkers, 500);
-            });
-        }
-
-        timeout = setTimeout(showPossibleWorkers, 500);
+        );
     }
-)();
+});
 
+function showPossibleWorkers() {
+    let coworkers = coworkerinfosBody.children;
+    let possibleWorkersToDelete = possibleWorkers.children;
+
+    while( possibleWorkers.children.length >= 1) {
+        possibleWorkers.removeChild(possibleWorkers.firstChild);
+    }
+
+    for(let element of coworkers) {
+        let workerName = element.children[0].textContent;
+
+        if( hasTheSameCharacters(workerName, workerToDelete.value) &&
+        workerName.localeCompare(workerToDelete.value) >= 0 && 
+        !isArealdyInside(workerName) ) {
+            let workerInList = possibleWorkerName.content.querySelector('.worker');
+            workerInList.appendChild(document.createTextNode(workerName));
+            let clone = document.importNode(possibleWorkerName.content, true);
+            possibleWorkers.appendChild(clone);
+            workerInList.removeChild(workerInList.firstChild);
+            
+        }
+    }
+
+    for(let element of possibleWorkersToDelete) {
+        element.addEventListener('click', () => {
+            let workerName = element.textContent;
+            workerToDelete.value = workerName;
+            while( possibleWorkers.hasChildNodes() ) {
+                possibleWorkers.removeChild( possibleWorkers.firstChild );
+            }
+        });
+    }
+}
+
+workerToDelete.addEventListener('keyup', showPossibleWorkers);

@@ -14,19 +14,19 @@
             Add a coworker:
         </h1>
         <div class="write-coworker-data">
-            <input type="text" placeholder="Name" class="worker-name" id="worker-name">
-            <input type="text" placeholder="Shift" class="work-shift" id="work-shift">
-            <input type="number" placeholder="Hours" min="10" max="40" class="hours" id="hours">
-            <input type="button" class="add-btn" id="add-btn" value="Add">
+            <input autocomplete="off" type="text" placeholder="Name" class="worker-name" id="worker-name">
+            <input autocomplete="off" type="text" placeholder="Shift" class="work-shift" id="work-shift">
+            <input autocomplete="off" type="number" placeholder="Hours" min="10" max="40" class="hours" id="hours">
+            <input autocomplete="off" type="button" class="add-btn" id="add-btn" value="Add">
         </div>
         <h1>
             Delete a coworker:
         </h1>
         <div class="delete-coworker">
-            <input type="text" name="Name" id="worker-to-delete" class="worker-to-delete">
-            <ul class="possible-workers">
+            <input autocomplete="off" type="text" name="Name" id="worker-to-delete" class="worker-to-delete">
+            <div class="possible-workers">
 
-            </ul>
+            </div>
             <input type="button" class="del-btn" id="del-btn" value="Delete">
         </div>
         <table class="coworker-infos">
@@ -48,7 +48,7 @@
         </tr>
     </template>
     <template id="possible-worker-name">
-        <li class="worker"></li>
+        <button class="worker" type="button" name="worker-name"></button>
     </template>
     <script src="./js/index.js"></script>
 </body>

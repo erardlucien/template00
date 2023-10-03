@@ -82,20 +82,23 @@ $clr-gray: rgb(203, 203, 203);
 // possible-workers
 
 .possible-workers {
-    list-style: none;
     max-width: inherit;
+    margin-top: 1rem;
     background-color: $clr-secondary;
 
-    li {
+    .worker {
+        display: block;
         padding: 1.2rem 1.5rem;
         background-color: $clr-white;
         min-width: 7rem;
         color: $clr-ternary;
+        border: 0;
+        outline: 0.1rem solid transparent;
     }
 
     @media screen and (hover: hover) {
 
-        li:hover {
+        .worker:hover {
             background-color: $clr-primary;
             color: $clr-secondary;
         }
