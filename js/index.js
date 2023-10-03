@@ -15,6 +15,7 @@ let possibleWorkers = document.querySelector('.possible-workers');
 let possibleWorkerName = document.querySelector('#possible-worker-name');
 let messageElement = document.createElement('p');
 let timeout;
+let timeout2;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
 const MAXHOURS = parseInt(hours.max);
@@ -43,13 +44,14 @@ function getData(data) {
 function message(text) {
     if(messageElement.hasChildNodes()) {
         messageElement.removeChild(messageElement.firstChild);
+        clearTimeout(timeout2);
     }
 
     let messageText = document.createTextNode(text);
     messageElement.appendChild(messageText);
     container.insertBefore(messageElement, coworkerInfos);
 
-    setTimeout( () => {
+    timeout2 = setTimeout( () => {
         container.removeChild(messageElement);
     }, 1500 );
 }
