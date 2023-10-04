@@ -149,7 +149,7 @@ $clr-gray: rgb(203, 203, 203);
 
 .message {
     display: block;
-    position: absolute;
+    position: fixed;
     text-align: center;
     background-color: $clr-ternary;
     color: $clr-secondary;
