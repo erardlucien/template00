@@ -11,6 +11,7 @@ let workShift = document.querySelector('.work-shift');
 let hours = document.querySelector('.hours');
 let workerToDelete = document.querySelector('.worker-to-delete');
 let delBtn = document.querySelector('.del-btn');
+let delAllBtn = document.querySelector('.del-all-btn');
 let possibleWorkers = document.querySelector('.possible-workers');
 let searchCoworker = document.querySelector('.search-coworker');
 let searchingWorker = document.querySelector('.searching-worker');
@@ -20,6 +21,7 @@ let messageElement = document.createElement('p');
 messageElement.classList.add('message');
 let timeout;
 let timeout2;
+let storedData;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
 const MAXHOURS = parseInt(hours.max);
@@ -50,7 +52,8 @@ function getData(data) {
     coworkerDataCells[2].textContent = data[2];
 
     let clone = document.importNode(coworkerData.content, true);
-    if (coworkerinfosBody.hasChildNodes()) {
+    if( coworkerinfosBody.hasChildNodes() ) {
+        let length = coworkerinfosBody.children.length;
         coworkerinfosBody.insertBefore(clone, coworkerinfosBody.firstChild);
     } else {
         coworkerinfosBody.appendChild(clone);
@@ -136,16 +139,22 @@ function isArealdyInside(text, list) {
 }
 
 function deletePossibleWorkers() {
-    while (possibleWorkers.hasChildNodes()) {
+    while ( possibleWorkers.hasChildNodes() ) {
         possibleWorkers.removeChild(possibleWorkers.firstChild);
+    }
+}
+
+function removeAllData() {
+    while(coworkerinfosBody.hasChildNodes()) {
+        coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
 }
 
 // dataSamples.forEach(getData);
 
 if( typeof(Storage) !== 'undefined') {
-    let numberOfKeys = window.localStorage.length;
-    for(let i = numberOfKeys - 1; i >= 0; --i) {
+    let length = window.localStorage.length;
+    for(let i = 0; i  < length; ++i) {
         let keyElement = window.localStorage.key(i);
         let data = window.localStorage.getItem(keyElement);
         let dataElements = data.split(' ');
@@ -336,16 +345,12 @@ function showFindedWorkers() {
 
 }
 
-let storedData;
-
 workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
 searchingWorker.addEventListener('keyup', showFindedWorkers);
 
 resetBtn.addEventListener('click', () => {
-    if( ( storedData !== undefined || storedData !== null ) && storedData.hasChildNodes() ) {
-        while(coworkerinfosBody.hasChildNodes()) {
-            coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
-        }
+    if( storedData !== undefined && storedData !== null ) {
+        removeAllData();
     
         for(let element of storedData.children) {
             let copyElement = element.cloneNode(true);
@@ -354,6 +359,12 @@ resetBtn.addEventListener('click', () => {
 
         storedData = null;
     }
+});
+
+delAllBtn.addEventListener('click', () => {
+    message('All Workers were removed!');
+    removeAllData();
+    clearStorage();
 });
 
 

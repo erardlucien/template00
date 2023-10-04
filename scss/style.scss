@@ -68,7 +68,7 @@ $clr-gray: rgb(203, 203, 203);
         padding: 1.2rem 1.3rem;
     }
 
-    input:not(.add-btn, .del-btn, .reset-btn) {
+    input:not(.add-btn, .del-btn, .reset-btn, .del-all-btn) {
         max-width: 6rem;
     }
 }
@@ -112,7 +112,8 @@ $clr-gray: rgb(203, 203, 203);
 
 .add-btn,
 .del-btn,
-.reset-btn {
+.reset-btn,
+.del-all-btn {
     display: block;
     margin: 1.2rem auto;
     background-color: $clr-primary;
