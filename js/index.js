@@ -316,7 +316,7 @@ searchingWorker.addEventListener('keyup', () => {
         , 2000 );
     } else if( coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
         message('Scrolldown to see the result!');
-        messageElement.style.bottom = '40%';
+        messageElement.style.bottom = '30%';
 
         setTimeout( () => {
             messageElement.style.bottom = '70%';
