@@ -292,8 +292,6 @@ searchingWorker.addEventListener('keyup', () => {
         storedData = coworkerinfosBody.cloneNode(true);
     }
 
-    messageElement.style.bottom = '10%';
-
     while(coworkerinfosBody.hasChildNodes()) {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
@@ -314,6 +312,12 @@ searchingWorker.addEventListener('keyup', () => {
 
     if( !coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
         message('No Worker found with that Name!');
+        messageElement.style.bottom = '10%';
+
+        setTimeout( () => {
+            messageElement.style.bottom = '70%';
+        }
+        , 2000 );
     }
 
     if( searchingWorker.value === '' ) {
