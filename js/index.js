@@ -298,6 +298,12 @@ searchingWorker.addEventListener('keyup', () => {
 
     if( searchingWorker.value.length >= 1 ) {
         message('Scroll down to see the result!');
+        messageElement.style.bottom = '40%';
+
+        setTimeout( () => {
+            messageElement.style.bottom = '70%';
+        }
+        , 2000 );
     }
 
     for(let element of storedData.children) {
