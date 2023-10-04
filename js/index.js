@@ -292,6 +292,8 @@ searchingWorker.addEventListener('keyup', () => {
         storedData = coworkerinfosBody.cloneNode(true);
     }
 
+    messageElement.style.bottom = '10%';
+
     while(coworkerinfosBody.hasChildNodes()) {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
