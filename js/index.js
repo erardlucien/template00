@@ -296,16 +296,6 @@ searchingWorker.addEventListener('keyup', () => {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
 
-    if( searchingWorker.value.length >= 1 ) {
-        message('Scroll down to see the result!');
-        messageElement.style.bottom = '40%';
-
-        setTimeout( () => {
-            messageElement.style.bottom = '70%';
-        }
-        , 2000 );
-    }
-
     for(let element of storedData.children) {
         let workerName = element.children[0].textContent;
         if ( hasTheSameCharacters(workerName, searchingWorker.value) &&
@@ -319,6 +309,14 @@ searchingWorker.addEventListener('keyup', () => {
     if( !coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
         message('No Worker found with that Name!');
         messageElement.style.bottom = '10%';
+
+        setTimeout( () => {
+            messageElement.style.bottom = '70%';
+        }
+        , 2000 );
+    } else if( coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
+        message('Scrolldown to see the result!');
+        messageElement.style.bottom = '40%';
 
         setTimeout( () => {
             messageElement.style.bottom = '70%';
