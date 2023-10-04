@@ -58,18 +58,24 @@ function getData(data) {
 }
 
 function message(text) {
-    if (messageElement.hasChildNodes()) {
+    let messageList = text.split('! ');
+
+    while (messageElement.hasChildNodes()) {
         messageElement.removeChild(messageElement.firstChild);
         clearTimeout(timeout2);
     }
 
-    let messageText = document.createTextNode(text);
-    messageElement.appendChild(messageText);
+    for(let element of messageList) {
+        let messageText = document.createTextNode(element);
+        messageElement.appendChild(messageText);
+        let newLine = document.createElement('br');
+        messageElement.appendChild(newLine);
+    }
     container.appendChild(messageElement);
 
     timeout2 = setTimeout(() => {
         container.removeChild(messageElement);
-    }, 1500);
+    }, 2000);
 }
 
 function isworkShiftValid(workShiftText) {
@@ -135,7 +141,7 @@ function deletePossibleWorkers() {
     }
 }
 
-dataSamples.forEach(getData);
+// dataSamples.forEach(getData);
 
 if( typeof(Storage) !== 'undefined') {
     let numberOfKeys = window.localStorage.length;
@@ -196,7 +202,7 @@ addBtn.addEventListener('click', () => {
 
     saveValue( workerNameText, (workerNameText + ' ' + workShiftText + ' ' + hoursNumber) );
     getData([workerNameText, workShiftText, hoursNumber]);
-    message(workerNameText + ' was added!');
+    message(workerNameText + ' was added! Scrolldown to see the in the list!');
 });
 
 delBtn.addEventListener('click', () => {
@@ -240,7 +246,7 @@ searchingWorker.addEventListener('keyup', () => {
         window.scrollBy(
             {
                 behavior: 'instant',
-                top: searchingWorker.getBoundingClientRect().top - 60,
+                top: searchingWorker.getBoundingClientRect().top,
             }
         );
     }
@@ -290,6 +296,10 @@ searchingWorker.addEventListener('keyup', () => {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
 
+    if( searchingWorker.value.length >= 1 ) {
+        message('Scroll down to see the result!');
+    }
+
     for(let element of storedData.children) {
         let workerName = element.children[0].textContent;
         if ( hasTheSameCharacters(workerName, searchingWorker.value) &&
@@ -298,6 +308,10 @@ searchingWorker.addEventListener('keyup', () => {
             let copyElement = element.cloneNode(true);
             coworkerinfosBody.appendChild(copyElement);
         }
+    }
+
+    if( !coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
+        message('No Worker found with that Name!');
     }
 
     if( searchingWorker.value === '' ) {
