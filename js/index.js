@@ -252,7 +252,7 @@ searchingWorker.addEventListener('keyup', () => {
     }
 });
 
-function showPossibleWorkers() {
+function showPossibleWorkersToDelete() {
     let coworkers = coworkerinfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
@@ -284,10 +284,7 @@ function showPossibleWorkers() {
     }
 }
 
-let storedData;
-
-workerToDelete.addEventListener('keyup', showPossibleWorkers);
-searchingWorker.addEventListener('keyup', () => {
+function showFindedWorkers() {
     if( storedData === undefined || storedData === null ) {
         storedData = coworkerinfosBody.cloneNode(true);
     }
@@ -337,7 +334,12 @@ searchingWorker.addEventListener('keyup', () => {
         storedData = null;
     }
 
-});
+}
+
+let storedData;
+
+workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
+searchingWorker.addEventListener('keyup', showFindedWorkers);
 
 resetBtn.addEventListener('click', () => {
     if( ( storedData !== undefined || storedData !== null ) && storedData.hasChildNodes() ) {
@@ -353,3 +355,7 @@ resetBtn.addEventListener('click', () => {
         storedData = null;
     }
 });
+
+
+window.addEventListener('DOMContentLoaded', showPossibleWorkersToDelete);
+window.addEventListener('DOMContentLoaded', showFindedWorkers);
