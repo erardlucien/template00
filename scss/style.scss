@@ -25,6 +25,7 @@ $clr-gray: rgb(203, 203, 203);
 // container
 
 .container {
+    position: relative;
     min-height: 100vh;
     background-color: $clr-secondary;
     display: flex;
@@ -57,7 +58,8 @@ $clr-gray: rgb(203, 203, 203);
 // write-coworker-data, delete-coworker
 
 .write-coworker-data,
-.delete-coworker {
+.delete-coworker,
+.search-coworker {
     display: flex;
     max-width: 20rem;
     justify-content: space-between;
@@ -67,14 +69,15 @@ $clr-gray: rgb(203, 203, 203);
         padding: 1.2rem 1.3rem;
     }
 
-    input:not(.add-btn, .del-btn) {
+    input:not(.add-btn, .del-btn, .reset-btn) {
         max-width: 6rem;
     }
 }
 
-// delete-coworker
+// delete-coworker and search-coworker
 
-.delete-coworker {
+.delete-coworker,
+.search-coworker {
     flex-direction: column;
     align-items: center;
 }
@@ -106,10 +109,11 @@ $clr-gray: rgb(203, 203, 203);
     }
 }
 
-// add-btn, del-btn
+// add-btn, del-btn, reset-btn
 
 .add-btn,
-.del-btn {
+.del-btn,
+.reset-btn {
     display: block;
     margin: 1.2rem auto;
     background-color: $clr-primary;
@@ -139,4 +143,21 @@ $clr-gray: rgb(203, 203, 203);
     td:not(thead td) {
         background-color: $clr-table-cells;
     }
+}
+
+// message
+
+.message {
+    display: block;
+    position: absolute;
+    text-align: center;
+    background-color: $clr-ternary;
+    color: $clr-secondary;
+    width: 100%;
+    height: 7rem;
+    padding: 2rem 1.5rem;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    z-index: 99;
 }

@@ -12,8 +12,12 @@ let hours = document.querySelector('.hours');
 let workerToDelete = document.querySelector('.worker-to-delete');
 let delBtn = document.querySelector('.del-btn');
 let possibleWorkers = document.querySelector('.possible-workers');
+let searchCoworker = document.querySelector('.search-coworker');
+let searchingWorker = document.querySelector('.searching-worker');
+let resetBtn = document.querySelector('.reset-btn');
 let possibleWorkerName = document.querySelector('#possible-worker-name');
 let messageElement = document.createElement('p');
+messageElement.classList.add('message');
 let timeout;
 let timeout2;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
@@ -27,6 +31,18 @@ let dataSamples = [
     ['Emily', 'Night', 15],
     ['Suzane', 'Late', 25],
 ];
+
+function saveValue(name, value) {
+    if( typeof(Storage) !== 'undefined' ) {
+        window.localStorage.setItem(name, value);
+    } else {
+        alert('Your webbrowser doesn\'t support Web Storage');
+    }
+}
+
+function clearStorage() {
+    window.localStorage.clear();
+}
 
 function getData(data) {
     coworkerDataCells[0].textContent = data[0];
@@ -49,7 +65,7 @@ function message(text) {
 
     let messageText = document.createTextNode(text);
     messageElement.appendChild(messageText);
-    container.insertBefore(messageElement, coworkerInfos);
+    container.appendChild(messageElement);
 
     timeout2 = setTimeout(() => {
         container.removeChild(messageElement);
@@ -65,7 +81,7 @@ function isworkShiftValid(workShiftText) {
     return false;
 }
 
-function isAlreadyAWorker(name) {
+function isAlreadyAWorker(name, list) {
     let toCompare1 = name.toUpperCase();
     for (let element of coworkerinfosBody.children) {
         let toCompare2 = element.children[0].textContent.toUpperCase();
@@ -100,10 +116,10 @@ function hasTheSameCharacters(toCompare1, toCompare2) {
     return true;
 }
 
-function isArealdyInside(text) {
-    let possibleWorkersToDelete = possibleWorkers.children;
+function isArealdyInside(text, list) {
+    let elements = list.children;
     let toCompare1 = text.toLowerCase();
-    for (let element of possibleWorkersToDelete) {
+    for (let element of elements) {
         let toCompare2 = element.textContent.toLowerCase();
         if (toCompare1.localeCompare(toCompare2) === 0) {
             return true;
@@ -120,6 +136,16 @@ function deletePossibleWorkers() {
 }
 
 dataSamples.forEach(getData);
+
+if( typeof(Storage) !== 'undefined') {
+    let numberOfKeys = window.localStorage.length;
+    for(let i = numberOfKeys - 1; i >= 0; --i) {
+        let keyElement = window.localStorage.key(i);
+        let data = window.localStorage.getItem(keyElement);
+        let dataElements = data.split(' ');
+        getData([dataElements[0], dataElements[1], dataElements[2]]);
+    }
+}
 
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
@@ -168,6 +194,7 @@ addBtn.addEventListener('click', () => {
         return;
     }
 
+    saveValue( workerNameText, (workerNameText + ' ' + workShiftText + ' ' + hoursNumber) );
     getData([workerNameText, workShiftText, hoursNumber]);
     message(workerNameText + ' was added!');
 });
@@ -176,7 +203,7 @@ delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
 
     if (toDelete.length < 1) {
-        message('You muss write a name!');
+        message('You must write a name!');
         return;
     }
 
@@ -189,6 +216,7 @@ delBtn.addEventListener('click', () => {
         message(toDelete + ' is not part of the list!');
     } else {
         workerToDelete.value = '';
+        window.localStorage.removeItem(toDelete);
         coworkerinfosBody.removeChild(returnWorker(toDelete));
         deletePossibleWorkers();
         message(toDelete + ' was deleted!');
@@ -207,6 +235,17 @@ workerToDelete.addEventListener('keyup', () => {
     }
 });
 
+searchingWorker.addEventListener('keyup', () => {
+    if (searchingWorker.value.length > 0) {
+        window.scrollBy(
+            {
+                behavior: 'instant',
+                top: searchingWorker.getBoundingClientRect().top - 60,
+            }
+        );
+    }
+});
+
 function showPossibleWorkers() {
     let coworkers = coworkerinfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
@@ -220,7 +259,7 @@ function showPossibleWorkers() {
 
         if (hasTheSameCharacters(workerName, workerToDelete.value) &&
             workerName.localeCompare(workerToDelete.value) >= 0 &&
-            !isArealdyInside(workerName)) {
+            !isArealdyInside(workerName, possibleWorkers)) {
             let workerInList = possibleWorkerName.content.querySelector('.worker');
             workerInList.appendChild(document.createTextNode(workerName));
             let clone = document.importNode(possibleWorkerName.content, true);
@@ -239,4 +278,54 @@ function showPossibleWorkers() {
     }
 }
 
+let storedData;
+
 workerToDelete.addEventListener('keyup', showPossibleWorkers);
+searchingWorker.addEventListener('keyup', () => {
+    if( storedData === undefined || storedData === null ) {
+        storedData = coworkerinfosBody.cloneNode(true);
+    }
+
+    while(coworkerinfosBody.hasChildNodes()) {
+        coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+    }
+
+    for(let element of storedData.children) {
+        let workerName = element.children[0].textContent;
+        if ( hasTheSameCharacters(workerName, searchingWorker.value) &&
+        workerName.localeCompare(searchingWorker.value) >= 0 && 
+        !isArealdyInside(workerName, coworkerinfosBody)) {
+            let copyElement = element.cloneNode(true);
+            coworkerinfosBody.appendChild(copyElement);
+        }
+    }
+
+    if( searchingWorker.value === '' ) {
+        while(coworkerinfosBody.hasChildNodes()) {
+            coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+        }
+    
+        for(let element of storedData.children) {
+            let copyElement = element.cloneNode(true);
+            coworkerinfosBody.appendChild(copyElement);
+        }
+
+        storedData = null;
+    }
+
+});
+
+resetBtn.addEventListener('click', () => {
+    if( ( storedData !== undefined || storedData !== null ) && storedData.hasChildNodes() ) {
+        while(coworkerinfosBody.hasChildNodes()) {
+            coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+        }
+    
+        for(let element of storedData.children) {
+            let copyElement = element.cloneNode(true);
+            coworkerinfosBody.appendChild(copyElement);
+        }
+
+        storedData = null;
+    }
+});
