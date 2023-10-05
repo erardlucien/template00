@@ -35,7 +35,7 @@ let dataSamples = [
 ];
 
 function saveValue(name, value) {
-    if( typeof(Storage) !== 'undefined' ) {
+    if (typeof (Storage) !== 'undefined') {
         window.localStorage.setItem(name, value);
     } else {
         alert('Your webbrowser doesn\'t support Web Storage');
@@ -52,7 +52,7 @@ function getData(data) {
     coworkerDataCells[2].textContent = data[2];
 
     let clone = document.importNode(coworkerData.content, true);
-    if( coworkerinfosBody.hasChildNodes() ) {
+    if (coworkerinfosBody.hasChildNodes()) {
         let length = coworkerinfosBody.children.length;
         coworkerinfosBody.insertBefore(clone, coworkerinfosBody.firstChild);
     } else {
@@ -63,12 +63,18 @@ function getData(data) {
 function message(text) {
     let messageList = text.split('! ');
 
+    if(text.indexOf('!') === 0) {
+        messageElement.style.backgroundColor = 'var(--clr-warning)';
+    } else {
+        messageElement.style.backgroundColor = 'var(--clr-ternary)';
+    }
+
     while (messageElement.hasChildNodes()) {
         messageElement.removeChild(messageElement.firstChild);
         clearTimeout(timeout2);
     }
 
-    for(let element of messageList) {
+    for (let element of messageList) {
         let messageText = document.createTextNode(element);
         messageElement.appendChild(messageText);
         let newLine = document.createElement('br');
@@ -139,22 +145,22 @@ function isArealdyInside(text, list) {
 }
 
 function deletePossibleWorkers() {
-    while ( possibleWorkers.hasChildNodes() ) {
+    while (possibleWorkers.hasChildNodes()) {
         possibleWorkers.removeChild(possibleWorkers.firstChild);
     }
 }
 
 function removeAllData() {
-    while(coworkerinfosBody.hasChildNodes()) {
+    while (coworkerinfosBody.hasChildNodes()) {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
 }
 
 // dataSamples.forEach(getData);
 
-if( typeof(Storage) !== 'undefined') {
+if (typeof (Storage) !== 'undefined') {
     let length = window.localStorage.length;
-    for(let i = 0; i  < length; ++i) {
+    for (let i = 0; i < length; ++i) {
         let keyElement = window.localStorage.key(i);
         let data = window.localStorage.getItem(keyElement);
         let dataElements = data.split(' ');
@@ -173,23 +179,23 @@ addBtn.addEventListener('click', () => {
     if (workerNameText.length < 1 ||
         workShiftText.length < 1 ||
         hoursNumber.length < 1) {
-        message('Every inputs must be set!');
+        message('!Every inputs must be set!');
         return;
     }
 
-    if (workerNameText.indexOf(' ') >= 0 ||
-        workShiftText.indexOf(' ') >= 0) {
-        message('Space is not allowed!');
+    if ( hasSpace(workerNameText) ||
+        hasSpace(workShiftText) ) {
+        message('!Space is not allowed!');
         return;
     }
 
     if (isNaN(hoursNumber)) {
-        message('Only Number is allowed for hours!');
+        message('!Only Number is allowed for hours!');
         return;
     }
 
     if (workerNameText.length >= MAXNAMELENGTH + 1) {
-        message('The length of name must be smaller than ' + (MAXNAMELENGTH + 1) + '!');
+        message('!The length of name must be smaller than ' + (MAXNAMELENGTH + 1) + '!');
         return;
     }
 
@@ -205,11 +211,11 @@ addBtn.addEventListener('click', () => {
     }
 
     if (hoursNumber < MINHOURS || hoursNumber >= MAXHOURS + 1) {
-        message('Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!');
+        message('!Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!');
         return;
     }
 
-    saveValue( workerNameText, (workerNameText + ' ' + workShiftText + ' ' + hoursNumber) );
+    saveValue(workerNameText, (workerNameText + ' ' + workShiftText + ' ' + hoursNumber));
     getData([workerNameText, workShiftText, hoursNumber]);
     message(workerNameText + ' was added! Scrolldown to see the in the list!');
 });
@@ -218,16 +224,16 @@ delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
 
     if (toDelete.length < 1) {
-        message('You must write a name!');
+        message('!You must write a name!');
         return;
     }
 
-    if (toDelete.indexOf(' ') >= 0) {
-        message('Space is not allowed!');
+    if ( hasSpace(toDelete.value) ) {
+        message('!Space is not allowed!');
         return;
     }
 
-    if (!isAlreadyAWorker(toDelete)) {
+    if ( !isAlreadyAWorker(toDelete) && !hasSpace(toDelete.value) ) {
         message(toDelete + ' is not part of the list!');
     } else {
         workerToDelete.value = '';
@@ -265,6 +271,11 @@ function showPossibleWorkersToDelete() {
     let coworkers = coworkerinfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
+    if( hasSpace(workerToDelete.value) ) {
+        message('!Space is not allowed!');
+        return;
+    }
+
     while (possibleWorkers.children.length >= 1) {
         possibleWorkers.removeChild(possibleWorkers.firstChild);
     }
@@ -293,49 +304,66 @@ function showPossibleWorkersToDelete() {
     }
 }
 
+function hasSpace(text) {
+    if(text !== undefined && text !== null && typeof(text) === 'string') {
+        return text.indexOf(' ') >= 0;
+    }
+    return false;
+}
+
 function showFindedWorkers() {
-    if( storedData === undefined || storedData === null ) {
+    if (storedData === undefined || storedData === null) {
         storedData = coworkerinfosBody.cloneNode(true);
     }
 
-    while(coworkerinfosBody.hasChildNodes()) {
+    if( hasSpace(searchingWorker.value) ) {
+        message('!Space is not allowed!');
+        return;
+    }
+
+    while (coworkerinfosBody.hasChildNodes()) {
         coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
     }
 
-    for(let element of storedData.children) {
+    for (let element of storedData.children) {
         let workerName = element.children[0].textContent;
-        if ( hasTheSameCharacters(workerName, searchingWorker.value) &&
-        workerName.localeCompare(searchingWorker.value) >= 0 && 
-        !isArealdyInside(workerName, coworkerinfosBody)) {
+        if (hasTheSameCharacters(workerName, searchingWorker.value) &&
+            workerName.localeCompare(searchingWorker.value) >= 0 &&
+            !isArealdyInside(workerName, coworkerinfosBody)) {
             let copyElement = element.cloneNode(true);
             coworkerinfosBody.appendChild(copyElement);
         }
     }
 
-    if( !coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
+    if ( !coworkerinfosBody.hasChildNodes()
+        && searchingWorker.value.length >= 1
+        && !hasSpace(searchingWorker.value)
+    ) {
         message('No Worker found with that Name!');
         messageElement.style.bottom = '10%';
 
-        setTimeout( () => {
+        setTimeout(() => {
             messageElement.style.bottom = '70%';
         }
-        , 2000 );
-    } else if( coworkerinfosBody.hasChildNodes() && searchingWorker.value.length >= 1) {
+            , 2000);
+    } else if ( coworkerinfosBody.hasChildNodes()
+        && searchingWorker.value.length >= 1
+        && !hasSpace(searchingWorker.value) ) {
         message('Scrolldown to see the result!');
         messageElement.style.bottom = '30%';
 
-        setTimeout( () => {
+        setTimeout(() => {
             messageElement.style.bottom = '70%';
         }
-        , 2000 );
+            , 2000);
     }
 
-    if( searchingWorker.value === '' ) {
-        while(coworkerinfosBody.hasChildNodes()) {
+    if (searchingWorker.value === '') {
+        while (coworkerinfosBody.hasChildNodes()) {
             coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
         }
-    
-        for(let element of storedData.children) {
+
+        for (let element of storedData.children) {
             let copyElement = element.cloneNode(true);
             coworkerinfosBody.appendChild(copyElement);
         }
@@ -346,13 +374,13 @@ function showFindedWorkers() {
 }
 
 workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
-searchingWorker.addEventListener('keyup', showFindedWorkers);
+searchingWorker.addEventListener('input', showFindedWorkers);
 
 resetBtn.addEventListener('click', () => {
-    if( storedData !== undefined && storedData !== null ) {
+    if (storedData !== undefined && storedData !== null) {
         removeAllData();
-    
-        for(let element of storedData.children) {
+
+        for (let element of storedData.children) {
             let copyElement = element.cloneNode(true);
             coworkerinfosBody.appendChild(copyElement);
         }
@@ -366,7 +394,3 @@ delAllBtn.addEventListener('click', () => {
     removeAllData();
     clearStorage();
 });
-
-
-window.addEventListener('DOMContentLoaded', showPossibleWorkersToDelete);
-window.addEventListener('DOMContentLoaded', showFindedWorkers);

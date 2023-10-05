@@ -17,10 +17,17 @@ html {
 
 $clr-primary: rgb(60, 160, 203);
 $clr-secondary: rgb(245, 245, 243);
-$clr-ternary: rgb(25, 25, 13);
+$clr-ternary: var(--clr-ternary);
 $clr-white: rgb(255, 255, 255);
+$clr-warning: var(--clr-warning);
+$clr-hover-btn: rgb(255, 165, 71);
 $clr-table-cells: rgb(205, 245, 243);
 $clr-gray: rgb(203, 203, 203);
+
+:root {
+    --clr-warning: rgb(225, 12, 13);
+    --clr-ternary: rgb(25, 25, 13);
+}
 
 // container
 
@@ -108,7 +115,7 @@ $clr-gray: rgb(203, 203, 203);
     }
 }
 
-// add-btn, del-btn, reset-btn
+// add-btn, del-btn, reset-btn, del-all-btn
 
 .add-btn,
 .del-btn,
@@ -122,10 +129,26 @@ $clr-gray: rgb(203, 203, 203);
     outline: 0.1rem solid transparent;
     cursor: pointer;
 
+    @media screen and (hover: hover) {
+        &:hover {
+            background-color: $clr-hover-btn;
+        }
+    }
+
     &:active {
         background-color: $clr-secondary;
         color: $clr-primary;
         border: 0.1rem solid $clr-gray;
+    }
+}
+
+// del-all-btn
+
+.del-all-btn {
+    background-color: $clr-warning;
+
+    &:active {
+        color: $clr-warning;
     }
 }
 
