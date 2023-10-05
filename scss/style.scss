@@ -2,7 +2,7 @@
 
 html {
     box-sizing: border-box;
-    font-size: 62,5%;
+    font-size: 62.5%;
 }
 
 *,
@@ -20,7 +20,7 @@ $clr-secondary: rgb(245, 245, 243);
 $clr-ternary: var(--clr-ternary);
 $clr-white: rgb(255, 255, 255);
 $clr-warning: var(--clr-warning);
-$clr-hover-btn: rgb(255, 165, 71);
+$clr-hover-focus: rgb(255, 165, 71);
 $clr-table-cells: rgb(205, 245, 243);
 $clr-gray: rgb(203, 203, 203);
 
@@ -41,10 +41,11 @@ $clr-gray: rgb(203, 203, 203);
 
     * {
         color: $clr-ternary;
+        font-size: 1.5rem;
     }
 
-    h1:nth-of-type(1) {
-        margin-top: 1.5rem;
+    h1 {
+        margin: 2.5rem 0 1.2rem 0;
     }
 
     p {
@@ -61,45 +62,70 @@ $clr-gray: rgb(203, 203, 203);
     }
 }
 
-// write-coworker-data, delete-coworker
+// write-coworker-data, delete-coworker, search-coworker
 
 .write-coworker-data,
 .delete-coworker,
 .search-coworker {
     display: flex;
-    max-width: 20rem;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+
+    @media screen and (min-width: 60em) {
+        &:not(.search-coworker) {
+            flex-direction: row;
+            height: 6rem;
+            
+            *:not(.worker) {
+                margin: 3.5rem 1.2rem;
+            }
+        }
+
+        margin-bottom: 2rem;
+    }
 
     input {
+        margin-top: 2rem;
         padding: 1.2rem 1.3rem;
+        outline: 0.1rem solid transparent;
     }
 
     input:not(.add-btn, .del-btn, .reset-btn, .del-all-btn) {
-        max-width: 6rem;
+        min-height: 4rem;
+        max-height: 6rem;
+        min-width: 5rem;
+        max-width: 15rem;
+        border: 0.1rem solid $clr-ternary;
+
+        &:focus {
+            border: 0.1rem solid $clr-hover-focus !important;
+        }
     }
 }
 
-// delete-coworker and search-coworker
+// delete-coworker
 
-.delete-coworker,
-.search-coworker {
-    flex-direction: column;
-    align-items: center;
+.delete-coworker {
+    position: relative;
 }
 
 // possible-workers
 
 .possible-workers {
-    max-width: inherit;
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: fit-content;
     margin-top: 1rem;
-    background-color: $clr-secondary;
-
+    
+    @media screen and (min-width: 60em) {
+        top: 0;
+    }
     .worker {
         display: block;
         padding: 1.2rem 1.5rem;
         background-color: $clr-white;
-        min-width: 7rem;
+        width: 7rem;
         color: $clr-ternary;
         border: 0;
         border-bottom: 0.1rem solid $clr-ternary;
@@ -131,7 +157,7 @@ $clr-gray: rgb(203, 203, 203);
 
     @media screen and (hover: hover) {
         &:hover {
-            background-color: $clr-hover-btn;
+            background-color: $clr-hover-focus;
         }
     }
 

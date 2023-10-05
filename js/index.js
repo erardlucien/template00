@@ -2,7 +2,7 @@
 
 let container = document.querySelector('.container');
 let coworkerInfos = document.querySelector('.coworker-infos');
-let coworkerinfosBody = document.querySelector('.coworker-infos-body');
+let coworkerInfosBody = document.querySelector('.coworker-infos-body');
 let coworkerData = document.querySelector('#coworker-data');
 let coworkerDataCells = coworkerData.content.querySelectorAll('td');
 let addBtn = document.querySelector('.add-btn');
@@ -26,6 +26,8 @@ const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
 const MAXHOURS = parseInt(hours.max);
 const MAXNAMELENGTH = 11;
+const FIRSTID = 1000;
+let idCounter = 0;
 
 let dataSamples = [
     ['Mark', 'Early', 23],
@@ -52,11 +54,11 @@ function getData(data) {
     coworkerDataCells[2].textContent = data[2];
 
     let clone = document.importNode(coworkerData.content, true);
-    if (coworkerinfosBody.hasChildNodes()) {
-        let length = coworkerinfosBody.children.length;
-        coworkerinfosBody.insertBefore(clone, coworkerinfosBody.firstChild);
+    if (coworkerInfosBody.hasChildNodes()) {
+        let length = coworkerInfosBody.children.length;
+        coworkerInfosBody.insertBefore(clone, coworkerInfosBody.firstChild);
     } else {
-        coworkerinfosBody.appendChild(clone);
+        coworkerInfosBody.appendChild(clone);
     }
 }
 
@@ -98,7 +100,7 @@ function isworkShiftValid(workShiftText) {
 
 function isAlreadyAWorker(name, list) {
     let toCompare1 = name.toUpperCase();
-    for (let element of coworkerinfosBody.children) {
+    for (let element of coworkerInfosBody.children) {
         let toCompare2 = element.children[0].textContent.toUpperCase();
         if (toCompare1.localeCompare(toCompare2) === 0) {
             return true;
@@ -108,7 +110,7 @@ function isAlreadyAWorker(name, list) {
 }
 
 function returnWorker(name) {
-    for (let element of coworkerinfosBody.children) {
+    for (let element of coworkerInfosBody.children) {
         if (element.children[0].textContent === name) {
             return element;
         }
@@ -151,8 +153,8 @@ function deletePossibleWorkers() {
 }
 
 function removeAllData() {
-    while (coworkerinfosBody.hasChildNodes()) {
-        coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+    while (coworkerInfosBody.hasChildNodes()) {
+        coworkerInfosBody.removeChild(coworkerInfosBody.firstChild);
     }
 }
 
@@ -161,10 +163,9 @@ function removeAllData() {
 if (typeof (Storage) !== 'undefined') {
     let length = window.localStorage.length;
     for (let i = 0; i < length; ++i) {
-        let keyElement = window.localStorage.key(i);
-        let data = window.localStorage.getItem(keyElement);
+        let data = localStorage.getItem( ( FIRSTID + idCounter++ )  );
         let dataElements = data.split(' ');
-        getData([dataElements[0], dataElements[1], dataElements[2]]);
+        getData( [ dataElements[0], dataElements[1], dataElements[2] ] );
     }
 }
 
@@ -215,7 +216,7 @@ addBtn.addEventListener('click', () => {
         return;
     }
 
-    saveValue(workerNameText, (workerNameText + ' ' + workShiftText + ' ' + hoursNumber));
+    saveValue( (FIRSTID + idCounter++), ( workerNameText + ' ' + workShiftText + ' ' + hoursNumber  ) );
     getData([workerNameText, workShiftText, hoursNumber]);
     message(workerNameText + ' was added! Scrolldown to see the in the list!');
 });
@@ -238,9 +239,21 @@ delBtn.addEventListener('click', () => {
     } else {
         workerToDelete.value = '';
         window.localStorage.removeItem(toDelete);
-        coworkerinfosBody.removeChild(returnWorker(toDelete));
+        coworkerInfosBody.removeChild(returnWorker(toDelete));
         deletePossibleWorkers();
         message(toDelete + ' was deleted!');
+        
+        if (typeof (Storage) !== 'undefined') {
+            let length = coworkerInfosBody.children.length;
+            idCounter = 0;
+            clearStorage();
+
+            for (let i = length - 1; i >= 0; --i) {
+                let element = coworkerInfosBody.children[i];
+                let data = element.children;
+                localStorage.setItem( (FIRSTID + idCounter++), ( data[0].textContent + ' ' + data[1].textContent + ' ' + data[2].textContent ) );
+            }
+        }
     }
 }
 );
@@ -268,7 +281,7 @@ searchingWorker.addEventListener('keyup', () => {
 });
 
 function showPossibleWorkersToDelete() {
-    let coworkers = coworkerinfosBody.children;
+    let coworkers = coworkerInfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
     if( hasSpace(workerToDelete.value) ) {
@@ -313,7 +326,7 @@ function hasSpace(text) {
 
 function showFindedWorkers() {
     if (storedData === undefined || storedData === null) {
-        storedData = coworkerinfosBody.cloneNode(true);
+        storedData = coworkerInfosBody.cloneNode(true);
     }
 
     if( hasSpace(searchingWorker.value) ) {
@@ -321,21 +334,21 @@ function showFindedWorkers() {
         return;
     }
 
-    while (coworkerinfosBody.hasChildNodes()) {
-        coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+    while (coworkerInfosBody.hasChildNodes()) {
+        coworkerInfosBody.removeChild(coworkerInfosBody.firstChild);
     }
 
     for (let element of storedData.children) {
         let workerName = element.children[0].textContent;
         if (hasTheSameCharacters(workerName, searchingWorker.value) &&
             workerName.localeCompare(searchingWorker.value) >= 0 &&
-            !isArealdyInside(workerName, coworkerinfosBody)) {
+            !isArealdyInside(workerName, coworkerInfosBody)) {
             let copyElement = element.cloneNode(true);
-            coworkerinfosBody.appendChild(copyElement);
+            coworkerInfosBody.appendChild(copyElement);
         }
     }
 
-    if ( !coworkerinfosBody.hasChildNodes()
+    if ( !coworkerInfosBody.hasChildNodes()
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value)
     ) {
@@ -346,7 +359,7 @@ function showFindedWorkers() {
             messageElement.style.bottom = '70%';
         }
             , 2000);
-    } else if ( coworkerinfosBody.hasChildNodes()
+    } else if ( coworkerInfosBody.hasChildNodes()
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value) ) {
         message('Scrolldown to see the result!');
@@ -359,13 +372,13 @@ function showFindedWorkers() {
     }
 
     if (searchingWorker.value === '') {
-        while (coworkerinfosBody.hasChildNodes()) {
-            coworkerinfosBody.removeChild(coworkerinfosBody.firstChild);
+        while (coworkerInfosBody.hasChildNodes()) {
+            coworkerInfosBody.removeChild(coworkerInfosBody.firstChild);
         }
 
         for (let element of storedData.children) {
             let copyElement = element.cloneNode(true);
-            coworkerinfosBody.appendChild(copyElement);
+            coworkerInfosBody.appendChild(copyElement);
         }
 
         storedData = null;
@@ -382,7 +395,7 @@ resetBtn.addEventListener('click', () => {
 
         for (let element of storedData.children) {
             let copyElement = element.cloneNode(true);
-            coworkerinfosBody.appendChild(copyElement);
+            coworkerInfosBody.appendChild(copyElement);
         }
 
         storedData = null;
@@ -393,4 +406,5 @@ delAllBtn.addEventListener('click', () => {
     message('All Workers were removed!');
     removeAllData();
     clearStorage();
+    idCounter = 0;
 });
