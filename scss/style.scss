@@ -113,19 +113,14 @@ $clr-gray: rgb(203, 203, 203);
 
 .possible-workers {
     position: absolute;
-    top: 20%;
+    top: 30%;
     left: 0;
-    width: fit-content;
-    margin-top: 1rem;
+    list-style: none;
     
-    @media screen and (min-width: 60em) {
-        top: 0;
-    }
     .worker {
         display: block;
         padding: 1.2rem 1.5rem;
         background-color: $clr-white;
-        width: 7rem;
         color: $clr-ternary;
         border: 0;
         border-bottom: 0.1rem solid $clr-ternary;

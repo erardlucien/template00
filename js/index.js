@@ -263,7 +263,7 @@ workerToDelete.addEventListener('keyup', () => {
         window.scrollBy(
             {
                 behavior: 'instant',
-                top: workerToDelete.getBoundingClientRect().top - 60,
+                top: workerToDelete.getBoundingClientRect().top,
             }
         );
     }
@@ -403,8 +403,12 @@ resetBtn.addEventListener('click', () => {
 });
 
 delAllBtn.addEventListener('click', () => {
-    message('All Workers were removed!');
-    removeAllData();
-    clearStorage();
-    idCounter = 0;
+    if( coworkerInfosBody.hasChildNodes() ) {
+        message('All Workers were removed!');
+        removeAllData();
+        clearStorage();
+        idCounter = 0;
+    } else {
+        message('There is no element in the list!');
+    }
 });

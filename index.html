@@ -24,11 +24,9 @@
         </h1>
         <div class="delete-coworker">
             <input autocomplete="off" type="text" name="Name" id="worker-to-delete" class="worker-to-delete">
-            <div class="possible-workers">
-
-            </div>
             <input type="button" class="del-btn" id="del-btn" value="Delete">
             <input type="button" class="del-all-btn" id="del-all-btn" value="DELETE ALL">
+            <ul class="possible-workers"></ul>
         </div>
         <div class="search-coworker">
             <h1>
@@ -43,9 +41,7 @@
                 <td>Shift</td>
                 <td>Hours</td>
             </thead>
-            <tbody class="coworker-infos-body">
-
-            </tbody>
+            <tbody class="coworker-infos-body"></tbody>
         </table>
     </div>
     <template id="coworker-data">
@@ -56,7 +52,7 @@
         </tr>
     </template>
     <template id="possible-worker-name">
-        <button class="worker" type="button" name="worker-name"></button>
+        <li class="worker" type="button" name="worker-name"></li>
     </template>
     <script src="./js/index.js"></script>
 </body>
