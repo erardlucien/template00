@@ -258,28 +258,6 @@ delBtn.addEventListener('click', () => {
 }
 );
 
-workerToDelete.addEventListener('keyup', () => {
-    if (workerToDelete.value.length > 0) {
-        window.scrollTo(
-            {
-                behavior: 'smooth',
-                top: workerToDelete.getBoundingClientRect().top - 50,
-            }
-        );
-    }
-});
-
-searchingWorker.addEventListener('keyup', () => {
-    if (searchingWorker.value.length > 0) {
-        window.scrollBy(
-            {
-                behavior: 'smooth',
-                top: searchingWorker.getBoundingClientRect().top - 50,
-            }
-        );
-    }
-});
-
 function showPossibleWorkersToDelete() {
     let coworkers = coworkerInfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
