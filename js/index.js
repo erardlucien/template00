@@ -260,10 +260,10 @@ delBtn.addEventListener('click', () => {
 
 workerToDelete.addEventListener('keyup', () => {
     if (workerToDelete.value.length > 0) {
-        window.scrollBy(
+        window.scrollTo(
             {
-                behavior: 'instant',
-                top: workerToDelete.getBoundingClientRect().top,
+                behavior: 'smooth',
+                top: workerToDelete.getBoundingClientRect().top - 50,
             }
         );
     }
@@ -273,8 +273,8 @@ searchingWorker.addEventListener('keyup', () => {
     if (searchingWorker.value.length > 0) {
         window.scrollBy(
             {
-                behavior: 'instant',
-                top: searchingWorker.getBoundingClientRect().top,
+                behavior: 'smooth',
+                top: searchingWorker.getBoundingClientRect().top - 50,
             }
         );
     }
