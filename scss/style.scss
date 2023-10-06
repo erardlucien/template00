@@ -93,7 +93,7 @@ $clr-gray: rgb(203, 203, 203);
     input:not(.add-btn, .del-btn, .reset-btn, .del-all-btn) {
         min-height: 4rem;
         max-height: 6rem;
-        min-width: 5rem;
+        min-width: 10rem;
         max-width: 15rem;
         border: 0.1rem solid $clr-ternary;
 
