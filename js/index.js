@@ -21,6 +21,7 @@ let messageElement = document.createElement('p');
 messageElement.classList.add('message');
 let timeout;
 let timeout2;
+let timeout3;
 let storedData;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
@@ -65,7 +66,7 @@ function getData(data) {
 function message(text) {
     let messageList = text.split('! ');
 
-    if(text.indexOf('!') === 0) {
+    if (text.indexOf('!') === 0) {
         messageElement.style.backgroundColor = 'var(--clr-warning)';
     } else {
         messageElement.style.backgroundColor = 'var(--clr-ternary)';
@@ -163,9 +164,9 @@ function removeAllData() {
 if (typeof (Storage) !== 'undefined') {
     let length = window.localStorage.length;
     for (let i = 0; i < length; ++i) {
-        let data = localStorage.getItem( ( FIRSTID + idCounter++ )  );
+        let data = localStorage.getItem((FIRSTID + idCounter++));
         let dataElements = data.split(' ');
-        getData( [ dataElements[0], dataElements[1], dataElements[2] ] );
+        getData([dataElements[0], dataElements[1], dataElements[2]]);
     }
 }
 
@@ -184,8 +185,8 @@ addBtn.addEventListener('click', () => {
         return;
     }
 
-    if ( hasSpace(workerNameText) ||
-        hasSpace(workShiftText) ) {
+    if (hasSpace(workerNameText) ||
+        hasSpace(workShiftText)) {
         message('!Space is not allowed!');
         return;
     }
@@ -216,7 +217,7 @@ addBtn.addEventListener('click', () => {
         return;
     }
 
-    saveValue( (FIRSTID + idCounter++), ( workerNameText + ' ' + workShiftText + ' ' + hoursNumber  ) );
+    saveValue((FIRSTID + idCounter++), (workerNameText + ' ' + workShiftText + ' ' + hoursNumber));
     getData([workerNameText, workShiftText, hoursNumber]);
     message(workerNameText + ' was added! Scrolldown to see the in the list!');
 });
@@ -229,12 +230,12 @@ delBtn.addEventListener('click', () => {
         return;
     }
 
-    if ( hasSpace(toDelete.value) ) {
+    if (hasSpace(toDelete.value)) {
         message('!Space is not allowed!');
         return;
     }
 
-    if ( !isAlreadyAWorker(toDelete) && !hasSpace(toDelete.value) ) {
+    if (!isAlreadyAWorker(toDelete) && !hasSpace(toDelete.value)) {
         message(toDelete + ' is not part of the list!');
     } else {
         workerToDelete.value = '';
@@ -242,7 +243,7 @@ delBtn.addEventListener('click', () => {
         coworkerInfosBody.removeChild(returnWorker(toDelete));
         deletePossibleWorkers();
         message(toDelete + ' was deleted!');
-        
+
         if (typeof (Storage) !== 'undefined') {
             let length = coworkerInfosBody.children.length;
             idCounter = 0;
@@ -251,7 +252,7 @@ delBtn.addEventListener('click', () => {
             for (let i = length - 1; i >= 0; --i) {
                 let element = coworkerInfosBody.children[i];
                 let data = element.children;
-                localStorage.setItem( (FIRSTID + idCounter++), ( data[0].textContent + ' ' + data[1].textContent + ' ' + data[2].textContent ) );
+                localStorage.setItem((FIRSTID + idCounter++), (data[0].textContent + ' ' + data[1].textContent + ' ' + data[2].textContent));
             }
         }
     }
@@ -262,7 +263,7 @@ function showPossibleWorkersToDelete() {
     let coworkers = coworkerInfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
-    if( hasSpace(workerToDelete.value) ) {
+    if (hasSpace(workerToDelete.value)) {
         message('!Space is not allowed!');
         return;
     }
@@ -296,18 +297,29 @@ function showPossibleWorkersToDelete() {
 }
 
 function hasSpace(text) {
-    if(text !== undefined && text !== null && typeof(text) === 'string') {
+    if (text !== undefined && text !== null && typeof (text) === 'string') {
         return text.indexOf(' ') >= 0;
     }
     return false;
 }
 
+function clearTimeout3() {
+    if(timeout3 !== undefined || timeout3 !== null) {
+        clearTimeout(timeout3);
+    }
+
+    timeout3 = null;
+}
+
 function showFindedWorkers() {
+
+    clearTimeout3();
+
     if (storedData === undefined || storedData === null) {
         storedData = coworkerInfosBody.cloneNode(true);
     }
 
-    if( hasSpace(searchingWorker.value) ) {
+    if (hasSpace(searchingWorker.value)) {
         message('!Space is not allowed!');
         return;
     }
@@ -326,27 +338,18 @@ function showFindedWorkers() {
         }
     }
 
-    if ( !coworkerInfosBody.hasChildNodes()
+    if (!coworkerInfosBody.hasChildNodes()
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value)
     ) {
         message('No Worker found with that Name!');
-        messageElement.style.bottom = '10%';
-
-        setTimeout(() => {
-            messageElement.style.bottom = '70%';
-        }
-            , 2000);
-    } else if ( coworkerInfosBody.hasChildNodes()
+    } else if (coworkerInfosBody.hasChildNodes()
         && searchingWorker.value.length >= 1
-        && !hasSpace(searchingWorker.value) ) {
+        && !hasSpace(searchingWorker.value)) {
         message('Scrolldown to see the result!');
         messageElement.style.bottom = '30%';
 
-        setTimeout(() => {
-            messageElement.style.bottom = '70%';
-        }
-            , 2000);
+        resetMessagePosition();
     }
 
     if (searchingWorker.value === '') {
@@ -363,6 +366,30 @@ function showFindedWorkers() {
     }
 
 }
+
+function resetMessagePosition() {
+    timeout3 = setTimeout(() => {
+        messageElement.style.bottom = '70vh';
+    }
+        , 2000);
+}
+
+function setMessagePosition() {
+
+    clearTimeout3();
+    messageElement.style.bottom = '65vh';
+    resetMessagePosition();
+}
+
+function setMessagePosition2() {
+
+    clearTimeout3();
+    messageElement.style.bottom = '40vh';
+    resetMessagePosition();
+}
+
+workerToDelete.addEventListener('keyup', setMessagePosition);
+searchingWorker.addEventListener('keyup', setMessagePosition2);
 
 workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
 searchingWorker.addEventListener('input', showFindedWorkers);
@@ -381,7 +408,7 @@ resetBtn.addEventListener('click', () => {
 });
 
 delAllBtn.addEventListener('click', () => {
-    if( coworkerInfosBody.hasChildNodes() ) {
+    if (coworkerInfosBody.hasChildNodes()) {
         message('All Workers were removed!');
         removeAllData();
         clearStorage();
