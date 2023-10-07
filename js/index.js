@@ -377,7 +377,7 @@ function resetMessagePosition() {
 function setMessagePosition() {
 
     clearTimeout3();
-    messageElement.style.bottom = '65vh';
+    messageElement.style.bottom = '50vh';
     resetMessagePosition();
 }
 
