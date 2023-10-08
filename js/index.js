@@ -261,11 +261,12 @@ delBtn.addEventListener('click', () => {
 );
 
 function showPossibleWorkersToDelete() {
+    setMessagePosition();
+
     let coworkers = coworkerInfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
     if (hasSpace(workerToDelete.value)) {
-        setMessagePosition();
         message('!Space is not allowed!');
         return;
     }
