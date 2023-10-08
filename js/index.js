@@ -265,6 +265,7 @@ function showPossibleWorkersToDelete() {
     let possibleWorkersToDelete = possibleWorkers.children;
 
     if (hasSpace(workerToDelete.value)) {
+        setMessagePosition();
         message('!Space is not allowed!');
         return;
     }
@@ -364,7 +365,6 @@ function setMessagePosition2() {
 
 }
 
-workerToDelete.addEventListener('keyup', setMessagePosition);
 searchingWorker.addEventListener('keyup', setMessagePosition2);
 
 workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
