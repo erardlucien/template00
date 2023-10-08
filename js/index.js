@@ -21,7 +21,6 @@ let messageElement = document.createElement('p');
 messageElement.classList.add('message');
 let timeout;
 let timeout2;
-let timeout3;
 let storedData;
 const WORKSHIFTVALUES = ['Early', 'Late', 'Night'];
 const MINHOURS = parseInt(hours.min);
@@ -172,6 +171,7 @@ if (typeof (Storage) !== 'undefined') {
 
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
+    messageElement.style.bottom = '70vh';
 
     workerNameText = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1).toLowerCase());
 
@@ -224,6 +224,7 @@ addBtn.addEventListener('click', () => {
 
 delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
+    setMessagePosition();
 
     if (toDelete.length < 1) {
         message('!You must write a name!');
@@ -303,18 +304,7 @@ function hasSpace(text) {
     return false;
 }
 
-function clearTimeout3() {
-    if(timeout3 !== undefined || timeout3 !== null) {
-        clearTimeout(timeout3);
-    }
-
-    timeout3 = null;
-}
-
 function showFindedWorkers() {
-
-    clearTimeout3();
-
     if (storedData === undefined || storedData === null) {
         storedData = coworkerInfosBody.cloneNode(true);
     }
@@ -364,25 +354,14 @@ function showFindedWorkers() {
 
 }
 
-function resetMessagePosition() {
-    timeout3 = setTimeout(() => {
-        messageElement.style.bottom = '70vh';
-    }
-        , 2000);
-}
-
 function setMessagePosition() {
-
-    clearTimeout3();
     messageElement.style.bottom = '50vh';
-    resetMessagePosition();
+
 }
 
 function setMessagePosition2() {
-
-    clearTimeout3();
     messageElement.style.bottom = '40vh';
-    resetMessagePosition();
+
 }
 
 workerToDelete.addEventListener('keyup', setMessagePosition);
