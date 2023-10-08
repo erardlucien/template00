@@ -347,9 +347,6 @@ function showFindedWorkers() {
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value)) {
         message('Scrolldown to see the result!');
-        messageElement.style.bottom = '30%';
-
-        resetMessagePosition();
     }
 
     if (searchingWorker.value === '') {
