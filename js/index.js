@@ -373,6 +373,7 @@ searchingWorker.addEventListener('input', showFindedWorkers);
 resetBtn.addEventListener('click', () => {
     if (storedData !== undefined && storedData !== null) {
         removeAllData();
+        searchingWorker.value = '';
 
         for (let element of storedData.children) {
             let copyElement = element.cloneNode(true);
