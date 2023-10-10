@@ -62,8 +62,9 @@ function getData(data) {
     }
 }
 
-function message(text) {
+function message(text, prevSibling) {
     let messageList = text.split('! ');
+    let parent = prevSibling.parentNode;
 
     if (text.indexOf('!') === 0) {
         messageElement.style.backgroundColor = 'var(--clr-warning)';
@@ -82,10 +83,10 @@ function message(text) {
         let newLine = document.createElement('br');
         messageElement.appendChild(newLine);
     }
-    container.appendChild(messageElement);
+    parent.insertBefore(messageElement, prevSibling);
 
     timeout2 = setTimeout(() => {
-        container.removeChild(messageElement);
+        parent.removeChild(messageElement);
     }, 2000);
 }
 
@@ -171,7 +172,6 @@ if (typeof (Storage) !== 'undefined') {
 
 addBtn.addEventListener('click', () => {
     let workerNameText = workerName.value;
-    messageElement.style.bottom = '70vh';
 
     workerNameText = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1).toLowerCase());
 
@@ -181,69 +181,68 @@ addBtn.addEventListener('click', () => {
     if (workerNameText.length < 1 ||
         workShiftText.length < 1 ||
         hoursNumber.length < 1) {
-        message('!Every inputs must be set!');
+        message('!Every inputs must be set!', addBtn);
         return;
     }
 
     if (hasSpace(workerNameText) ||
         hasSpace(workShiftText)) {
-        message('!Space is not allowed!');
+        message('!Space is not allowed!', addBtn);
         return;
     }
 
     if (isNaN(hoursNumber)) {
-        message('!Only Number is allowed for hours!');
+        message('!Only Number is allowed for hours!', addBtn);
         return;
     }
 
     if (workerNameText.length >= MAXNAMELENGTH + 1) {
-        message('!The length of name must be smaller than ' + (MAXNAMELENGTH + 1) + '!');
+        message('!The length of name must be smaller than ' + (MAXNAMELENGTH + 1) + '!', addBtn);
         return;
     }
 
     if (isAlreadyAWorker(workerNameText)) {
         let name = workerNameText.slice(0, 1).toUpperCase().concat(workerNameText.slice(1));
-        message(name + ' is already a worker!');
+        message(name + ' is already a worker!', addBtn);
         return;
     }
 
     if (!isworkShiftValid(workShiftText)) {
-        message('The Shift must be Early, Late or Night!');
+        message('The Shift must be Early, Late or Night!', addBtn);
         return;
     }
 
     if (hoursNumber < MINHOURS || hoursNumber >= MAXHOURS + 1) {
-        message('!Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!');
+        message('!Only time between ' + MINHOURS + ' and ' + MAXHOURS + ' is allowed!', addBtn);
         return;
     }
 
     saveValue((FIRSTID + idCounter++), (workerNameText + ' ' + workShiftText + ' ' + hoursNumber));
     getData([workerNameText, workShiftText, hoursNumber]);
-    message(workerNameText + ' was added! Scrolldown to see the in the list!');
+    message(workerNameText + ' was added! Scrolldown to see the in the list!', addBtn);
 });
 
 delBtn.addEventListener('click', () => {
     let toDelete = workerToDelete.value;
-    setMessagePosition();
 
     if (toDelete.length < 1) {
-        message('!You must write a name!');
+        message('!You must write a name!', delBtn);
         return;
     }
 
     if (hasSpace(toDelete.value)) {
-        message('!Space is not allowed!');
+        message('!Space is not allowed!', delBtn);
         return;
     }
 
     if (!isAlreadyAWorker(toDelete) && !hasSpace(toDelete.value)) {
-        message(toDelete + ' is not part of the list!');
+        message(toDelete + ' is not part of the list!', delBtn);
     } else {
         workerToDelete.value = '';
         window.localStorage.removeItem(toDelete);
         coworkerInfosBody.removeChild(returnWorker(toDelete));
         deletePossibleWorkers();
-        message(toDelete + ' was deleted!');
+        message(toDelete + ' was deleted!', delBtn);
 
         if (typeof (Storage) !== 'undefined') {
             let length = coworkerInfosBody.children.length;
@@ -261,13 +260,12 @@ delBtn.addEventListener('click', () => {
 );
 
 function showPossibleWorkersToDelete() {
-    setMessagePosition();
 
     let coworkers = coworkerInfosBody.children;
     let possibleWorkersToDelete = possibleWorkers.children;
 
     if (hasSpace(workerToDelete.value)) {
-        message('!Space is not allowed!');
+        message('!Space is not allowed!', workerToDelete);
         return;
     }
 
@@ -312,7 +310,7 @@ function showFindedWorkers() {
     }
 
     if (hasSpace(searchingWorker.value)) {
-        message('!Space is not allowed!');
+        message('!Space is not allowed!', searchingWorker);
         return;
     }
 
@@ -334,11 +332,11 @@ function showFindedWorkers() {
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value)
     ) {
-        message('No Worker found with that Name!');
+        message('No Worker found with that Name!', searchingWorker);
     } else if (coworkerInfosBody.hasChildNodes()
         && searchingWorker.value.length >= 1
         && !hasSpace(searchingWorker.value)) {
-        message('Scrolldown to see the result!');
+        message('Scrolldown to see the result!', searchingWorker);
     }
 
     if (searchingWorker.value === '') {
@@ -355,18 +353,6 @@ function showFindedWorkers() {
     }
 
 }
-
-function setMessagePosition() {
-    messageElement.style.bottom = '50vh';
-
-}
-
-function setMessagePosition2() {
-    messageElement.style.bottom = '40vh';
-
-}
-
-searchingWorker.addEventListener('keyup', setMessagePosition2);
 
 workerToDelete.addEventListener('keyup', showPossibleWorkersToDelete);
 searchingWorker.addEventListener('input', showFindedWorkers);
@@ -387,11 +373,11 @@ resetBtn.addEventListener('click', () => {
 
 delAllBtn.addEventListener('click', () => {
     if (coworkerInfosBody.hasChildNodes()) {
-        message('All Workers were removed!');
+        message('All Workers were removed!', delAllBtn);
         removeAllData();
         clearStorage();
         idCounter = 0;
     } else {
-        message('There is no element in the list!');
+        message('There is no element in the list!', delAllBtn);
     }
 });
