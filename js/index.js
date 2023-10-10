@@ -230,12 +230,12 @@ delBtn.addEventListener('click', () => {
         return;
     }
 
-    if (hasSpace(toDelete.value)) {
+    if (hasSpace(toDelete)) {
         message('!Space is not allowed!', delBtn);
         return;
     }
 
-    if (!isAlreadyAWorker(toDelete) && !hasSpace(toDelete.value)) {
+    if (!isAlreadyAWorker(toDelete) && !hasSpace(toDelete)) {
         message(toDelete + ' is not part of the list!', delBtn);
     } else {
         workerToDelete.value = '';
